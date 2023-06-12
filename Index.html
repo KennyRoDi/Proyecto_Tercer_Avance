@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta charset="UTF-8">
+    <title>Agenda</title>
+    <style>
+
+       body {
+            font-family: "Helvetica Now", Arial, sans-serif;
+            background-image: url("reunion.jpg");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-color: #f7f7f7; /* Cambia el color de fondo si la imagen no se carga */
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333; /* Cambia el color del título */
+            font-size: 30px; /* Aumenta el tamaño del título */
+        }
+
+        .section {
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            background-color: #eee; /* Cambia el color de fondo de las secciones */
+            padding: 10px; /* Agrega un espacio interno a las secciones */
+            transition: background-color 1s ease; /* Agrega una transición suave */
+        }
+
+        .section-title:hover {
+            background-color: #ccc; /* Cambia el color de fondo al pasar el ratón */
+        }
+
+        .section-title h2 {
+            margin: 0;
+            color: #555; /* Cambia el color del texto del título */
+            font-size: 20px; /* Aumenta el tamaño del texto del título */
+        }
+
+        .section-content {
+            margin-top: 10px;
+            padding-left: 20px;
+            display: none;
+        }
+
+        .section-title button {
+            font-size: 25px;
+            color: #555;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .section-content.show {
+            display: block;
+            animation: fade-in 1s ease; /* Agrega una animación de entrada */
+        }
+
+        @keyframes fade-in {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1 id="agenda-title">Agenda</h1>
+
+    <div class="section">
+
+        <div class="section-title">
+            <h2>Participantes</h2>
+            <button>+</button>
+        </div>
+
+        <ul class="section-content">
+            {% for participante in participantes %}
+                <li>{{ participante }}</li>
+            {% endfor %}
+        </ul>
+
+    </div>
+
+    <div class="section">
+
+        <div class="section-title">
+            <h2>Apartados</h2>
+            <button>+</button>
+        </div>
+
+        <ul class="section-content">
+            {% for apartado in apartados %}
+                <li>
+                    {{ apartado.nombre }}
+                    <ul>
+                        {% for punto in apartado.puntos %}
+                            <li>{{ punto }}</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            {% endfor %}
+        </ul>
+
+    </div>
+
+    <div class="section">
+
+        <div class="section-title">
+            <h2>Comentarios</h2>
+            <button>+</button>
+        </div>
+
+        <ul class="section-content">
+            {% for comentario in comentarios %}
+                <li>{{ comentario }}</li>
+            {% endfor %}
+        </ul>
+
+    </div>
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function() {
+            var sectionTitles = document.getElementsByClassName("section-title");
+            for (var i = 0; i < sectionTitles.length; i++) {
+                sectionTitles[i].addEventListener("click", toggleSection);
+            }
+
+            function toggleSection() {
+                var content = this.nextElementSibling;
+                var button = this.querySelector("button");
+
+                if (content.classList.contains("show")) {
+                    content.classList.remove("show");
+                    button.textContent = "+";
+                } else {
+                    content.classList.add("show");
+                    button.textContent = "-";
+                }
+            }
+        });
+
+    </script>
+</body>
+</html>
