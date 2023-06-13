@@ -1,9 +1,8 @@
 #--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
-
 #SE IMPORTAN LAS LIBRERIAS Y FUNCIONES DE OTROS ARCHIVOS HACIA ESTE ARCHIVO
 import tkinter.messagebox as messagebox
 import customtkinter as ctk
-from nuevaAgenda import crear_agenda, agregar_participante, agregar_apartado, agregar_puntos, participante_asList, puntos_asDict
+from nuevaAgenda import crear_agenda, agregar_participante, agregar_apartado, agregar_puntos, participante_asList, puntos_asDict, crear_discusion
 from datetime import datetime
 
 #--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
@@ -182,7 +181,7 @@ class VentanaSecundaria:
             self.menu_opciones_participantes.place(x=250, y=150) # se le da una ubicacion al menu de participantes
             self.menu_opciones_discusion.place(x=250, y=210) # se le da una ubicacion al menu de discusiones
 
-            self.btn_guardar = ctk.CTkButton(self.frame_ventana_secundaria, text="Guardar") # se crea el boton guardar
+            self.btn_guardar = ctk.CTkButton(self.frame_ventana_secundaria, text="Guardar", command=self.agregar_discusion) # se crea el boton guardar
             self.btn_guardar.place(x=520, y=10) # se le da una ubicacion
 
             self.btn_eliminar = ctk.CTkButton(self.frame_ventana_secundaria, text="Eliminar") # se crea el boton de eliminar
@@ -227,8 +226,7 @@ class VentanaSecundaria:
             self.entries.append(entry)
 
         self.barra_entrada_puntos.delete(0, ctk.END)
-        self.barra_entrada_puntos.destroy()
-        self.label_puntos.destroy()
+        self.barra_entrada_puntos.configure(state = "disabled")
 
 #--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 
@@ -292,20 +290,16 @@ class VentanaSecundaria:
         """Se encarga de guardar los puntos de los apartados en la agenda"""
         self.agregar_apartados()
         self.guardar_punto(self.apartado)
-
-        self.label_puntos = ctk.CTkLabel(self.frame_ventana_secundaria, bg_color= "green", text=" ¿Cuántos puntos desea agregar? ", font=("Arial", 15)) # se crea un label para preguntar cuantos puntos se desean agregar
-        self.label_puntos.place(x=10, y=50) # se le da una ubicacion
-
-        self.barra_entrada_puntos = ctk.CTkEntry(self.frame_ventana_secundaria, width=250, placeholder_text= "Ingrese el numero de puntos", justify="center")
-        self.barra_entrada_puntos.place(x=250, y=50) # se le da una ubicacion
+        
+        self.barra_entrada_puntos.configure(state = "normal")
 
 #--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 
     def desplegar_entrada_discusion(self):
         """Esta funcion de encarga de desplegar una barra para introducir las discusiones
         """
-        textbox = ctk.CTkTextbox(self.frame_ventana_secundaria, text_color="dark blue", width=510, height=150, corner_radius=8, fg_color= "sky blue")
-        textbox.place(x=150, y=260)
+        self.textbox = ctk.CTkEntry(self.frame_ventana_secundaria, text_color="dark blue", width=510, height=150, corner_radius=8, fg_color= "sky blue")
+        self.textbox.place(x=150, y=260)
 
 #--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 
@@ -313,6 +307,17 @@ class VentanaSecundaria:
         self.apartado_seleccionado=self.menu_opciones_apartados.get() # Obtener el apartado seleccionado
         self.puntos = list(self.diccionario_apartados_puntos.get(self.apartado_seleccionado, [])) # Obtener los puntos del apartado seleccionado
         self.menu_opciones_puntos.configure(values= self.puntos) # Actualizar los puntos en el menú de opciones
+
+#--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+
+    def agregar_discusion(self):
+        self.menu_opciones_apartados.get()
+        self.menu_opciones_puntos.get()
+        self.menu_opciones_participantes.get()
+        discusiones = self.textbox.get()
+        crear_discusion (self.menu_opciones_participantes, self.menu_opciones_apartados, self.menu_opciones_puntos, discusiones)
+
+        self.textbox.delete(0, "end")
 
 #--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 
