@@ -3,7 +3,7 @@
 #SE IMPORTAN LAS LIBRERIAS Y FUNCIONES DE OTROS ARCHIVOS HACIA ESTE ARCHIVO
 import tkinter.messagebox as messagebox
 import customtkinter as ctk
-from NuevaAgenda import crear_agenda, agregar_participante, agregar_apartado, agregar_puntos, participante_asList, puntos_asDict
+from nuevaAgenda import crear_agenda, agregar_participante, agregar_apartado, agregar_puntos, participante_asList, puntos_asDict
 from datetime import datetime
 
 #--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
@@ -13,7 +13,6 @@ class VentanaPrincipal:
     """
     def __init__(self):
         """Constructor de la clase VentanaPrincipal"""
-        
         # SE CREA LA VENTANA PRINCIPAL Y SE LE DA UN TAMAÑO Y UN TITULO
         self.ventana_principal = ctk.CTk()
         self.ventana_principal.geometry("800x600")
@@ -42,7 +41,7 @@ class VentanaPrincipal:
         # SE CREA LA VARIABLE DE INSTANCIA PARA LA BARRA DE ENTRADA DE LA AGENDA
         self.agenda_nombre_asignado = False  # VARIABLE DE INSTANCIA PARA SABER SI SE HA ASIGNADO UN NOMBRE A LA AGENDA
 
-#-------------------------------- FUNCIONES DE LOS BOTONES DE VENTANA PRINCIPAL ------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 
     def botones_opciones(self, value):
         """Función que se ejecuta cuando se presiona un botón del SegmentedButton de opciones de la ventana principal
@@ -57,6 +56,8 @@ class VentanaPrincipal:
         self.barra_agenda = ctk.CTkEntry(self.ventana_principal, width=250, placeholder_text="Ingrese el nombre de la agenda", justify="center")
         self.barra_agenda.place(x=180, y=20)
         self.btn_agregar_agenda.configure(state="disabled")
+
+#--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 
     def guardar_agenda(self):
         """Función que se ejecuta al presionar el botón de guardar"""
@@ -73,11 +74,11 @@ class VentanaPrincipal:
         fecha_agenda = datetime.now()  # Obtener la fecha actual
 
         self.label_fecha = ctk.CTkLabel(self.ventana_principal, text=fecha_agenda.strftime("%d/%m/%Y %H:%M:%S"), fg_color="light green", font=("Arial", 16, "bold"))
-        self.texto_fecha_label = ctk.CTkLabel(self.ventana_principal, text="Fecha y hora: ", font=("Arial", 18, "bold"), fg_color="cyan")
+        self.texto_fecha_label = ctk.CTkLabel(self.ventana_principal, text= "Fecha y hora: ", font=("Arial", 18, "bold"), fg_color= "cyan")
         self.label_fecha.place(x=630, y=20)
         self.texto_fecha_label.place(x=500, y=20)
 
-        crear_agenda(titulo_agenda, fecha_agenda, self.participantes_sesion, self.diccionario_apartados_puntos)  # Llamar a la función "crear_agenda" con los valores obtenidos
+        crear_agenda(titulo_agenda, fecha_agenda)  # Llamar a la función "crear_agenda" con los valores obtenidos
 
         self.barra_agenda.destroy()
         self.btn_agregar_agenda.destroy()
@@ -87,13 +88,12 @@ class VentanaPrincipal:
 
         self.agenda_nombre_asignado = True  # Cambiar el valor de la variable de instancia a True
 
-#---------------------------------- CLASE VENTANAS SECUNDARIAS -----------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 
 class VentanaSecundaria:
     """Clase que crea la ventana secundaria de la aplicación"""
 
     def __init__(self, ventana_principal, value, btn_opciones):
-
         """Constructor de la clase VentanaSecundaria"""
         self.participantes_sesion = participante_asList() # se almacenan los participantes en listas para poder ser elegidos
         self.diccionario_apartados_puntos = puntos_asDict()
@@ -105,7 +105,9 @@ class VentanaSecundaria:
         self.barra_discusion = None  # VARIABLE PARA AGREGAR DISCUSIONES EN APARTADOS
         self.entries = None
 
-#----------------- VENTANA APARTADOS ---------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+
+        # Ventana Apartados
 
         if value == "Apartados":
             #SE CREA EL LABEL APARTADOS
@@ -130,10 +132,9 @@ class VentanaSecundaria:
             self.btn_eliminar = ctk.CTkButton(self.frame_ventana_secundaria, text="Eliminar") # se crea el boton eliminar
             self.btn_eliminar.place(x=520, y=90) # se le da una posicion
 
-#----------------- VENTANA PARTICIPANTES ---------------------------------------------------------------------------
+        # Ventana participantes
 
         elif value == "Participantes":
-
             self.nombre = ctk.CTkLabel(self.frame_ventana_secundaria, text="Nombre: ", font=("Arial", 15), bg_color="green") # se crea un label para pedir el nombre
             self.apellido1 = ctk.CTkLabel(self.frame_ventana_secundaria, text="Primer Apellido: ", font=("Arial", 15), bg_color="green") # se crea un label para pedir el apellido 1
             self.apellido2 = ctk.CTkLabel(self.frame_ventana_secundaria, text="Segundo Apellido: ", font=("Arial", 15), bg_color="green") # se crea un label para pedir el apellido 2
@@ -156,10 +157,9 @@ class VentanaSecundaria:
             self.btn_eliminar = ctk.CTkButton(self.frame_ventana_secundaria, text="Eliminar") # se crea el boton de eliminar
             self.btn_eliminar.place(x=520, y=45) # se le da una ubicacion
 
-#----------------- VENTANA DISCUSIONES ------------------------------------------------------------------------
+        # Ventana Discusiones
 
         elif value == "Discusiones":
-
             self.label_seleccionar_apartados = ctk.CTkLabel(self.frame_ventana_secundaria, text=" Seleccione el apartado: ", font=("Arial", 15), bg_color="orange") # se crea el label que indica seleccionar el apartado
             self.label_seleccionar_punto = ctk.CTkLabel(self.frame_ventana_secundaria, text=" Seleccione el punto: ", font=("Arial", 15), bg_color="orange") # se crea el label que indica seleccionar el punto
             self.label_seleccionar_participante = ctk.CTkLabel(self.frame_ventana_secundaria, text=" Seleccione el participante: ", font=("Arial", 15), bg_color="orange") # se crea el label que indica seleccionar el participante
@@ -197,7 +197,7 @@ class VentanaSecundaria:
             self.btn_actualizar_puntos = ctk.CTkButton(self.frame_ventana_secundaria, text="Puntos", command= self.actualizar_puntos)
             self.btn_actualizar_puntos.place(x=520, y=160)
 
-#---------------------------- FUNCIONES DE LOS BOTONES DE VENTANA SECUNDARIA -------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 
     def crear_entradas_puntos(self):
         """Funcion que se encarga de crear las barras de entrada para indicar cuantos puntos se quieren agregar para un apartado
@@ -304,17 +304,15 @@ class VentanaSecundaria:
     def desplegar_entrada_discusion(self):
         """Esta funcion de encarga de desplegar una barra para introducir las discusiones
         """
-        textbox = ctk.CTkTextbox(self.frame_ventana_secundaria, text_color = "dark blue", width = 510, height = 150, corner_radius = 8, fg_color = "sky blue")
-        textbox.place(x = 150, y = 260)
+        textbox = ctk.CTkTextbox(self.frame_ventana_secundaria, text_color="dark blue", width=510, height=150, corner_radius=8, fg_color= "sky blue")
+        textbox.place(x=150, y=260)
 
 #--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
-    def actualizar_puntos(self):
-        # Obtener los puntos correspondientes al apartado seleccionado
-        apartado_seleccionado = self.menu_opciones_apartados.get()
-        puntos_apartado = agregar_puntos(apartado_seleccionado)  # Reemplaza esta línea con tu lógica para obtener los puntos del apartado
 
-        # Actualizar los valores en el menú de opciones de puntos
-        self.menu_opciones_puntos.set_values(puntos_apartado)
+    def actualizar_puntos(self): # Actualizar los puntos
+        self.apartado_seleccionado=self.menu_opciones_apartados.get() # Obtener el apartado seleccionado
+        self.puntos = list(self.diccionario_apartados_puntos.get(self.apartado_seleccionado, [])) # Obtener los puntos del apartado seleccionado
+        self.menu_opciones_puntos.configure(values= self.puntos) # Actualizar los puntos en el menú de opciones
 
 #--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 
